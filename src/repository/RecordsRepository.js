@@ -17,7 +17,7 @@ class _RecordsRepository {
             countryAbbreviation: record.sigla,
             event: record.evento,
             gender: record.sexo,
-            mark: record.marca,
+            mark: parseFloat(record.marca),
             athleteName: record.atletas
           }))
           return this.data

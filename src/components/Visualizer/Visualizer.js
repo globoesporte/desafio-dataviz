@@ -15,13 +15,25 @@ export class Visualizer extends Component {
       records: undefined,
       colors: undefined
     }
+    this.animations = []
   }
 
+  // componentDidMount () {
+  //   setInterval(() => {
+  //     this.animations.forEach(animation => animation.pause())
+  //     setTimeout(() => {
+  //       this.animations.forEach(animation => animation.play())
+  //     }, 400)
+  //   }, 1000)
+  // }
+
   componentWillMount () {
+    this.animations = []
+
     RecordsRepository
       .getRecords()
       // .then(records => records.filter((value, index) => {
-      //   if (index === 0) return value
+      //   if (index < 15 && index > 8) return value
       // }))
       .then(records => records.filter(record => record.gender === 'M'))
       .then(records => {
@@ -54,6 +66,9 @@ export class Visualizer extends Component {
     const ANIMATION_REVEAL_DURATION = 800
     const ANIMATION_REVEAL_DELAY = 200
     const ANIMATION_EASING = 'easeInOutQuad'
+    const ANIMATION_RUN_EASING = 'easeInQuad'
+    const ANIMATION_RUN_DURATION_FACTOR = 1200
+    const ANIMATION_RUN_AMOUNT = 600
 
     return (
 
@@ -66,19 +81,34 @@ export class Visualizer extends Component {
                 duration={ANIMATION_REVEAL_DURATION}
                 translateY={[-100, 0]}
                 delay={(el, i) => i * ANIMATION_REVEAL_DELAY}
-                complete={() => console.log('complete')}>
+                complete={() => console.log('complete')}
+                ref={ref => this.animations.push(ref.anime)}>
+
                 {this.state.records.map((record, index) =>
-                  <div
-                    key={record.id}
-                    style={{ position: 'relative' }}>
-                    <Circle size='15px' color={this.state.colors.next().value.toRGB()} />
+                  <div key={record.id}>
                     <Anime
-                      easing={ANIMATION_EASING}
-                      duration={300}
-                      opacity={[1, 0]}
-                      delay={() => index * ANIMATION_REVEAL_DELAY + ANIMATION_REVEAL_DURATION}>
-                      <div>
-                        <FloatingText>{record.year}</FloatingText>
+                      easing={ANIMATION_RUN_EASING}
+                      delay={this.state.records.length * ANIMATION_REVEAL_DELAY + ANIMATION_REVEAL_DURATION}
+                      translateY={[0, ANIMATION_RUN_AMOUNT]}
+                      duration={record.mark * ANIMATION_RUN_DURATION_FACTOR}
+                      complete={() => console.log(record)}
+                      ref={ref => {
+                        // console.log(record.mark * ANIMATION_RUN_DURATION_FACTOR)
+                        this.animations.push(ref.anime)
+                      }}>
+                      <div
+                        style={{ position: 'relative' }}>
+                        <Circle size='15px' color={this.state.colors.next().value.toRGB()} />
+                        <Anime
+                          easing={ANIMATION_EASING}
+                          duration={300}
+                          opacity={[1, 0]}
+                          delay={() => index * ANIMATION_REVEAL_DELAY + ANIMATION_REVEAL_DURATION}
+                          ref={ref => this.animations.push(ref.anime)}>
+                          <div>
+                            <FloatingText>{record.year}</FloatingText>
+                          </div>
+                        </Anime>
                       </div>
                     </Anime>
                   </div>
