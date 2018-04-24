@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-// import styled from 'styled-components'
+import styled from 'styled-components'
 import { Material } from '../Material/Material'
 import { RecordsRepository } from '../../repository/RecordsRepository'
 import { Circle } from '../Circle/Circle'
 import { Row } from '../Row/Row'
 import { GradientGenerator } from '../../util/GradientGenerator/GradientGenerator'
 import { HSV } from '../../util/HSV/HSV'
+import Anime from 'react-anime'
 
 export class Visualizer extends Component {
   constructor () {
@@ -19,6 +20,9 @@ export class Visualizer extends Component {
   componentWillMount () {
     RecordsRepository
       .getRecords()
+      // .then(records => records.filter((value, index) => {
+      //   if (index === 0) return value
+      // }))
       .then(records => records.filter(record => record.gender === 'M'))
       .then(records => {
         this.setState({
@@ -47,17 +51,39 @@ export class Visualizer extends Component {
   }
 
   render () {
+    const ANIMATION_REVEAL_DURATION = 800
+    const ANIMATION_REVEAL_DELAY = 200
+    const ANIMATION_EASING = 'easeInOutQuad'
+
     return (
+
       <Material>
         {
           this.state.records
             ? <Row>
-              {this.state.records.map(record =>
-                <div key={record.id}>
-                  <Circle size='15px' color={this.state.colors.next().value.toRGB()} />
-                  {/* <p>{record.year}</p> */}
-                </div>
-              )}
+              <Anime
+                easing={ANIMATION_EASING}
+                duration={ANIMATION_REVEAL_DURATION}
+                translateY={[-100, 0]}
+                delay={(el, i) => i * ANIMATION_REVEAL_DELAY}
+                complete={() => console.log('complete')}>
+                {this.state.records.map((record, index) =>
+                  <div
+                    key={record.id}
+                    style={{ position: 'relative' }}>
+                    <Circle size='15px' color={this.state.colors.next().value.toRGB()} />
+                    <Anime
+                      easing={ANIMATION_EASING}
+                      duration={300}
+                      opacity={[1, 0]}
+                      delay={() => index * ANIMATION_REVEAL_DELAY + ANIMATION_REVEAL_DURATION}>
+                      <div>
+                        <FloatingText>{record.year}</FloatingText>
+                      </div>
+                    </Anime>
+                  </div>
+                )}
+              </Anime>
             </Row>
             : <h3>Loading...</h3>
         }
@@ -65,3 +91,9 @@ export class Visualizer extends Component {
     )
   }
 }
+
+const FloatingText = styled.p`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+`
