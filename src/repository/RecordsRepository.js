@@ -9,9 +9,7 @@ class _RecordsRepository {
       return fetch('data/data.tsv')
         .then(response => response.text())
         .then(csv => {
-          // console.log(csv)
           const rawData = CSVToJSON(csv)
-          console.log(rawData)
 
           this.data = rawData.map(record => new CompetitionRecord({
             year: record.ano,
@@ -22,7 +20,6 @@ class _RecordsRepository {
             mark: record.marca,
             athleteName: record.atletas
           }))
-          console.log(this.data)
           return this.data
         })
     }
