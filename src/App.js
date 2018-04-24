@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
+// import logo from './logo.svg'
 import './App.css'
+import { Visualizer } from './components/Visualizer/Visualizer'
+
 // import { GradientGenerator } from './util/GradientGenerator/GradientGenerator';
 // import { HSV } from './util/HSV/HSV';
 // // import { RecordsRepository } from './repository/RecordsRepository'
@@ -20,15 +22,7 @@ import './App.css'
 class App extends Component {
   render () {
     return (
-      <div className='App'>
-        <header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
-          <h1 className='App-title'>Welcome to React</h1>
-        </header>
-        <p className='App-intro'>
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Visualizer />
     )
   }
 }

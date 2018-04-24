@@ -1,3 +1,5 @@
+import uuidv1 from 'uuid/v1'
+
 export class CompetitionRecord {
   constructor ({
     year,
@@ -8,6 +10,7 @@ export class CompetitionRecord {
     mark,
     athleteName
   }) {
+    this.id = uuidv1()
     this.year = year
     this.country = country
     this.countryAbbreviation = countryAbbreviation

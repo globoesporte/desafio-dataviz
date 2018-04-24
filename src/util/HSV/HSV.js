@@ -1,4 +1,5 @@
 import { hsvToRgb } from '../ColorConversion/hsvToRgb'
+import { rgbToHex } from '../ColorConversion/rgbToHex'
 
 export class HSV {
   constructor ({
@@ -12,6 +13,11 @@ export class HSV {
   }
 
   toRGB () {
-    return hsvToRgb(this.hue, this.saturation, this.value)
+    const [r, g, b] = hsvToRgb(this.hue, this.saturation, this.value)
+    return rgbToHex(
+      Math.floor(r),
+      Math.floor(g),
+      Math.floor(b)
+    )
   }
 }
