@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled, { keyframes } from 'styled-components'
+import uuidv1 from 'uuid/v1'
 
 import { Material } from '../Material/Material'
 import { RecordsRepository } from '../../repository/RecordsRepository'
@@ -8,11 +9,8 @@ import { Row } from '../Row/Row'
 import { GradientGenerator } from '../../util/GradientGenerator/GradientGenerator'
 import { HSV } from '../../util/HSV/HSV'
 import { ScoreBoard } from './ScoreBoard/ScoreBoard'
-
-const PlayState = {
-  running: 'running',
-  paused: 'paused'
-}
+import { Animation, PlayState } from '../Animation/Animation'
+import { Controls } from './Controls/Controls'
 
 export class Visualizer extends Component {
   constructor () {
@@ -22,60 +20,47 @@ export class Visualizer extends Component {
       colors: undefined,
       maxRecordsToShowOnBoard: 0,
       scoreBoard: undefined,
-      playState: PlayState.running
+      playState: PlayState.running,
+      uniqueKey: uuidv1()
     }
     this.animations = []
   }
 
-  // componentDidMount () {
-  //   setInterval(() => {
-  //     this.setState({ playState: PlayState.paused })
-  //     setTimeout(() => {
-  //       this.setState({ playState: PlayState.running })
-  //     }, 400)
-  //   }, 1000)
-  // }
+  setupRecords () {
+    RecordsRepository
+    .getRecords()
+    .then(records => records.filter(record => record.gender === 'M'))
+    .then(records => {
+      const colors = GradientGenerator
+          .generate({
+            from: new HSV({
+              hue: 0.6,
+              saturation: 1,
+              value: 1
+            }),
+            to: new HSV({
+              hue: 0,
+              saturation: 1,
+              value: 0.5
+            }),
+            steps: records.length
+          })
+          .map(hsv => hsv.toRGB())
+
+      this.setState({
+        colors
+      })
+
+      return {
+        records,
+        colors
+      }
+    })
+    .then(recordAndColors => this.setState({ records: recordAndColors.records }))
+  }
 
   componentWillMount () {
-    this.animations = []
-
-    RecordsRepository
-      .getRecords()
-      // .then(records => records.filter((value, index) => {
-      //   if (index < 15 && index > 8) return value
-      // }))
-      .then(records => records.filter(record => record.gender === 'M'))
-      .then(records => {
-        const colors = GradientGenerator
-            .generate({
-              from: new HSV({
-                hue: 0.6,
-                saturation: 1,
-                value: 1
-              }),
-              to: new HSV({
-                hue: 0,
-                saturation: 1,
-                value: 0.5
-              }),
-              steps: records.length
-            })
-            .map(hsv => hsv.toRGB())
-
-        this.setState({
-          colors
-        })
-
-        return {
-          records,
-          colors
-        }
-      })
-      // .then(records => {
-      //   console.log(records)
-      //   return records
-      // })
-      .then(recordAndColors => this.setState({ records: recordAndColors.records }))
+    this.setupRecords()
   }
 
   render () {
@@ -94,6 +79,8 @@ export class Visualizer extends Component {
               <FloatingContainer
                 width={this.state.records.length * (CIRCLE_SIZE + CIRCLE_MARGIN * 2) + 'px'}>
                 <ScoreBoard
+                  key={this.state.uniqueKey}
+                  playState={this.state.playState}
                   records={this.state.records}
                   colors={this.state.colors}
                   // maxRecordsToShow={100}
@@ -112,7 +99,7 @@ export class Visualizer extends Component {
                   delay={index * ANIMATION_REVEAL_DELAY}>
                   <RunAnimation
                     playState={this.state.playState}
-                    runAmount={'80vh'}
+                    runAmount={'90vh'}
                     onAnimationEnd={() => this.setState({ maxRecordsToShowOnBoard: this.state.maxRecordsToShowOnBoard + 1 })}
                     delay={this.state.records.length * ANIMATION_REVEAL_DELAY + ANIMATION_REVEAL_DURATION}
                     duration={record.mark * ANIMATION_RUN_DURATION_FACTOR}
@@ -136,6 +123,21 @@ export class Visualizer extends Component {
                   </RunAnimation>
                 </RevealAnimation>
               )}
+              <Controls
+                onPlay={() => this.setState({ playState: PlayState.running })}
+                onPause={() => this.setState({ playState: PlayState.paused })}
+                onReset={() => {
+                  /**
+                   * Ugly hack to restart the application.
+                   * The correct way was not working as expected and I've been coding
+                   * for 11 hours without stopping. This will do for the sake of this project
+                   */
+                  window.location.reload()
+                  // this.setState({ uniqueKey: uuidv1() })
+                  // this.setState({ records: [] }, () => this.setupRecords())
+                  // this.setState({ maxRecordsToShowOnBoard: 0 })
+                }}
+              />
             </Row>
             : <h3>Loading...</h3>
         }
@@ -156,14 +158,6 @@ const FloatingContainer = styled.div`
   left: 0;
   right: 0;
   max-width: ${props => props.width};
-`
-
-const Animation = styled.div`
-  animation-duration: ${props => (props.duration || '0.8') + 's'};
-  animation-delay: ${props => (props.delay || '0') + 's'};
-  animation-timing-function: ${props => props.easing || 'ease-in-out'};
-  animation-play-state: ${props => props.playState || 'running'};
-  animation-fill-mode: forwards;
 `
 
 function translateBuilder (from, to) {

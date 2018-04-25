@@ -6,7 +6,7 @@ import { Colors } from '../../../../theme/Colors'
 export class ScoreRecord extends Component {
   render () {
     return (
-      <TableRow>
+      <Record>
         <Group>
           <Badge backgroundColor={this.props.badgeColor}>
             {this.props.record.year}
@@ -18,16 +18,17 @@ export class ScoreRecord extends Component {
           <Text uppercase>{this.props.record.countryAbbreviation}</Text>
         </Group>
         <Group textAlign={'right'}>
+          {/* TODO: Add right pad so the mark is always with 2 decimal places */}
           <Text>{(this.props.record.mark + 's').replace('.', ',')}</Text>
         </Group>
-      </TableRow>
+      </Record>
     )
   }
 }
 
-const TableRow = styled.div`
+const Record = styled.div`
   width: 100%;
-  display: table-row;
+  display: contents;
   padding: 0px;
   background-color: rgba(255, 255, 255, 0.8);
 `

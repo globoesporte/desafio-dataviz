@@ -17,6 +17,5 @@ const alpha3ToAlpha2 = {
 }
 
 export function toAlpha2 (alpha3) {
-  console.log(`${alpha3} - ${alpha3ToAlpha2[alpha3]}`)
   return alpha3ToAlpha2[alpha3] || ''
 }
