@@ -107,6 +107,12 @@ export class Visualizer extends Component {
 
                     <div
                       style={{ position: 'relative' }}>
+                      {/*
+                        TODO: Add trailing line behind each circle. It is done by defining a div with linear gradient and animating
+                        the scale property (transform: Scale).
+                        Must use a different playState variable to indicate that the animation is done. It is set to paused when the
+                        first circle reaches the end of the animation
+                      */}
                       <Circle
                         size={`${CIRCLE_SIZE}px`}
                         margin={`${CIRCLE_MARGIN}px`}
