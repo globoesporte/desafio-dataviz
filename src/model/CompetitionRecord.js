@@ -5,6 +5,7 @@ export class CompetitionRecord {
     year,
     country,
     countryAbbreviation,
+    countryAbbreviationAlpha2,
     event,
     gender,
     mark,
@@ -14,6 +15,7 @@ export class CompetitionRecord {
     this.year = year
     this.country = country
     this.countryAbbreviation = countryAbbreviation
+    this.countryAbbreviationAlpha2 = countryAbbreviationAlpha2
     this.event = event
     this.gender = gender
     this.mark = mark

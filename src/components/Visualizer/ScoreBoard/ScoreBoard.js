@@ -27,7 +27,9 @@ export class ScoreBoard extends Component {
 
   render () {
     return (
-      <Material backgroundColor='transparent'>
+      <Material
+        backgroundColor='transparent'
+        style={{display: 'table', width: '100%'}}>
         {this.state.board
           .filter((relation, index) => {
             if (index < this.props.maxRecordsToShow) return relation

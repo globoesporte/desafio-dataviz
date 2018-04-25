@@ -29,9 +29,9 @@ export class Visualizer extends Component {
 
   // componentDidMount () {
   //   setInterval(() => {
-  //     this.animations.forEach(animation => animation.pause())
+  //     this.setState({ playState: PlayState.paused })
   //     setTimeout(() => {
-  //       this.animations.forEach(animation => animation.play())
+  //       this.setState({ playState: PlayState.running })
   //     }, 400)
   //   }, 1000)
   // }
@@ -83,17 +83,22 @@ export class Visualizer extends Component {
     const ANIMATION_REVEAL_DELAY = 0.2
     const ANIMATION_FADE_DURATION = 0.2
     const ANIMATION_RUN_DURATION_FACTOR = 0.5
+    const CIRCLE_SIZE = 15
+    const CIRCLE_MARGIN = 2
 
     return (
       <Material>
         {
           this.state.records
             ? <Row>
-              <FloatingContainer>
+              <FloatingContainer
+                width={this.state.records.length * (CIRCLE_SIZE + CIRCLE_MARGIN * 2) + 'px'}>
                 <ScoreBoard
                   records={this.state.records}
                   colors={this.state.colors}
-                  maxRecordsToShow={this.state.maxRecordsToShowOnBoard} />
+                  // maxRecordsToShow={100}
+                  maxRecordsToShow={this.state.maxRecordsToShowOnBoard}
+                  />
               </FloatingContainer>
 
               {this.state.records.map((record, index) =>
@@ -115,7 +120,10 @@ export class Visualizer extends Component {
 
                     <div
                       style={{ position: 'relative' }}>
-                      <Circle size='15px' color={this.state.colors[index]} />
+                      <Circle
+                        size={`${CIRCLE_SIZE}px`}
+                        margin={`${CIRCLE_MARGIN}px`}
+                        color={this.state.colors[index]} />
                       <FadeAnimation
                         playState={this.state.playState}
                         duration={ANIMATION_FADE_DURATION}
@@ -145,6 +153,9 @@ const FloatingText = styled.p`
 const FloatingContainer = styled.div`
   position: absolute;
   z-index: 1;
+  left: 0;
+  right: 0;
+  max-width: ${props => props.width};
 `
 
 const Animation = styled.div`

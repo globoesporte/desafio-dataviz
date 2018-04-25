@@ -1,6 +1,6 @@
 import { CompetitionRecord } from '../model/CompetitionRecord'
 import { CSVToJSON } from '../util/CSVToJSON/CSVToJSON'
-// import Data from '../../data/data.tsv'
+import { toAlpha2 } from '../util/CountryAbbreviation/CountryAbbreviation'
 
 class _RecordsRepository {
   getRecords () {
@@ -15,6 +15,7 @@ class _RecordsRepository {
             year: record.ano,
             country: record.pais,
             countryAbbreviation: record.sigla,
+            countryAbbreviationAlpha2: toAlpha2(record.sigla),
             event: record.evento,
             gender: record.sexo,
             mark: parseFloat(record.marca),
