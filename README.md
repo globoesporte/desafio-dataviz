@@ -29,3 +29,17 @@ Como referência utilize o [vídeo](./animation/animation.mp4) encontrado na pas
 ### Dados
 
 Na pasta `data/data.tsv` existe uma planilha separada por tabs. Utilize os valores nela contida para gerar a animação
+
+## Instruções
+
+As instruções a seguir utilizam o [Yarn](https://yarnpkg.com/) como gerenciador de dependência, mas é possível executar todos os comandos usando npm
+
+Para instalar as dependências, utilize
+```shell
+yarn
+```
+
+Para rodar o modo de desenvolvimento, use
+```shell
+yarn start
+```
