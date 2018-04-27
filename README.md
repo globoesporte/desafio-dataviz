@@ -48,4 +48,6 @@ yarn start
 
 O gif abaixo foi gravado no Firefox Quantum 59.0.2 (64-bit)
 
+https://brunocalou.github.io/desafio-dataviz/
+
 ![demo](https://user-images.githubusercontent.com/5948318/39319051-463fa186-4956-11e8-8005-7b5a61da45b2.gif)
