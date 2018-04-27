@@ -1,7 +1,8 @@
 export function CSVToJSON (CSV) {
-  const lines = CSV.split('\r\n')
-  const header = lines.shift().split('\t')
+  const lines = CSV.split('\n')
+  const header = lines.shift().replace('\r', '').split('\t')
   const data = lines
+    .map(line => line.replace('\r', ''))
     .map(line => {
       const object = {}
       line

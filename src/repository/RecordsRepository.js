@@ -4,29 +4,25 @@ import { toAlpha2 } from '../util/CountryAbbreviation/CountryAbbreviation'
 
 class _RecordsRepository {
   getRecords () {
-    if (this.data === undefined) {
+    let url = 'data/data.tsv'
       /* global fetch */
-      return fetch('data/data.tsv')
-        .then(response => response.text())
-        .then(csv => {
-          const rawData = CSVToJSON(csv)
+    return fetch(url)
+      .then(response => response.text())
+      .then(csv => {
+        const rawData = CSVToJSON(csv)
 
-          this.data = rawData.map(record => new CompetitionRecord({
-            year: record.ano,
-            country: record.pais,
-            countryAbbreviation: record.sigla,
-            countryAbbreviationAlpha2: toAlpha2(record.sigla),
-            event: record.evento,
-            gender: record.sexo,
-            mark: parseFloat(record.marca),
-            athleteName: record.atletas
-          }))
-          return this.data
-        })
-    }
-    return new Promise((resolve, reject) => {
-      resolve(this.data)
-    })
+        this.data = rawData.map(record => new CompetitionRecord({
+          year: record.ano,
+          country: record.pais,
+          countryAbbreviation: record.sigla,
+          countryAbbreviationAlpha2: toAlpha2(record.sigla),
+          event: record.evento,
+          gender: record.sexo,
+          mark: parseFloat(record.marca),
+          athleteName: record.atletas
+        }))
+        return this.data
+      })
   }
 }
 

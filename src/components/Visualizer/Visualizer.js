@@ -23,7 +23,6 @@ export class Visualizer extends Component {
       playState: PlayState.running,
       uniqueKey: uuidv1()
     }
-    this.animations = []
   }
 
   setupRecords () {
