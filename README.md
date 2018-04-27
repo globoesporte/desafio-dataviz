@@ -29,3 +29,25 @@ Como referência utilize o [vídeo](./animation/animation.mp4) encontrado na pas
 ### Dados
 
 Na pasta `data/data.tsv` existe uma planilha separada por tabs. Utilize os valores nela contida para gerar a animação
+
+## Instruções
+
+As instruções a seguir utilizam o [Yarn](https://yarnpkg.com/) como gerenciador de dependência, mas é possível executar todos os comandos usando npm
+
+Para instalar as dependências, utilize
+```shell
+yarn
+```
+
+Para rodar o modo de desenvolvimento, use
+```shell
+yarn start
+```
+
+## Demo
+
+O gif abaixo foi gravado no Firefox Quantum 59.0.2 (64-bit)
+
+https://brunocalou.github.io/desafio-dataviz/
+
+![demo](https://user-images.githubusercontent.com/5948318/39319051-463fa186-4956-11e8-8005-7b5a61da45b2.gif)
